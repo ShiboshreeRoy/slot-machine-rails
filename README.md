@@ -15,7 +15,7 @@ Players can spin, place bets, view recent spins, and earn rewards — all with a
   <source src="./app/assets/images/demo/20251026-1043-23.1031158.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
-
+---
 ## 🚀 Features
 
 - 🎮 Interactive 3-reel slot machine  
