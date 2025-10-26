@@ -1,0 +1,62 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-950 to-black flex items-center justify-center py-10 px-4">
+  <div class="w-full max-w-3xl bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-8 text-gray-100 transition-transform duration-300 hover:scale-[1.01]">
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-extrabold tracking-wide text-indigo-400 mb-2 drop-shadow-lg">🎰 Premium Slot Machine</h1>
+      <p class="text-gray-400 text-sm">Try your luck and win big — real-time spins with rewards!</p>
+    </div>
+
+    <!-- Balance -->
+    <div class="text-center mb-6">
+      <div id="balance" data-balance-target="value" class="inline-block bg-indigo-500/20 text-indigo-300 px-6 py-2 rounded-full text-lg font-semibold shadow-md">
+        💰 Balance: <span><%= @session.balance %></span> Coins
+      </div>
+    </div>
+
+    <!-- Slot Machine -->
+    <div data-controller="slot" data-slot-url-value="<%= spin_game_session_path %>">
+      <div class="reels grid grid-cols-3 gap-6 justify-center my-8">
+        <% 3.times do |i| %>
+          <div
+            class="reel bg-white/10 border border-white/20 backdrop-blur-md rounded-2xl p-6 h-48 flex items-center justify-center shadow-lg hover:shadow-indigo-500/30 transition-transform duration-300"
+            data-slot-target="reel" data-index="<%= i %>">
+            <img src="<%= asset_path('reels/cherry.png') %>" alt="reel" class="w-28 h-28 object-contain transition-transform duration-500 hover:scale-110"/>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls flex flex-col sm:flex-row items-center justify-center gap-4">
+        <label class="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl">
+          <span class="text-gray-300 font-medium">Bet</span>
+          <input type="number" min="1" max="100" value="1" data-slot-target="bet"
+                 class="bg-transparent border border-indigo-400/50 rounded-lg p-2 w-20 text-center text-white focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        </label>
+
+        <button
+          data-action="click->slot#spin"
+          class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold px-8 py-3 rounded-2xl shadow-lg hover:from-indigo-600 hover:to-purple-700 transition-all duration-300">
+          🎯 Spin
+        </button>
+
+        <div data-slot-target="message" class="ml-4 text-lg font-semibold text-yellow-300 drop-shadow-md"></div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="mt-10">
+      <h2 class="font-bold text-xl mb-3 text-indigo-300">Recent Spins</h2>
+      <ul id="recent-spins" data-slot-target="history" class="bg-white/5 border border-white/10 rounded-2xl p-4 text-sm text-gray-300 space-y-2 max-h-48 overflow-y-auto">
+        <% @session.spins.order(created_at: :desc).limit(5).each do |spin| %>
+          <li class="flex justify-between items-center bg-white/5 p-2 rounded-lg hover:bg-white/10 transition">
+            <span class="text-gray-400"><%= spin.created_at.strftime('%H:%M:%S') %></span>
+            <span class="font-mono"><%= JSON.parse(spin.result)['reels'].join(', ') %></span>
+            <span class="<%= spin.win > 0 ? 'text-green-400' : 'text-red-400' %> font-semibold">+<%= spin.win %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+  </div>
+</div>
