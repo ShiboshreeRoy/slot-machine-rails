@@ -1,0 +1,34 @@
+<div class="max-w-xl mx-auto p-6">
+  <h1 class="text-2xl font-bold mb-4">Slot Machine</h1>
+
+  <div id="balance" data-balance-target="value">Balance: <span><%= @session.balance %></span></div>
+
+  <div data-controller="slot" data-slot-url-value="<%= spin_game_session_path %>">
+    <div class="reels grid grid-cols-3 gap-4 my-6">
+      <% 3.times do |i| %>
+        <div class="reel bg-white/5 rounded-lg p-4 h-48 flex items-center justify-center" data-slot-target="reel" data-index="<%= i %>">
+          <img src="<%= asset_path('reels/cherry.png') %>" alt="reel" class="w-32 h-32 object-contain"/>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="controls flex gap-3 items-center">
+      <label>Bet
+        <input type="number" min="1" max="100" value="1" data-slot-target="bet" class="ml-2 p-1 w-20" />
+      </label>
+
+      <button data-action="click->slot#spin" class="btn btn-primary px-4 py-2 rounded">Spin</button>
+
+      <div data-slot-target="message" class="ml-4"></div>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <h2 class="font-semibold">Last Spins</h2>
+    <ul id="recent-spins" data-slot-target="history">
+      <% @session.spins.order(created_at: :desc).limit(5).each do |spin| %>
+        <li><%= spin.created_at.strftime('%H:%M:%S') %> — <%= JSON.parse(spin.result)['reels'].join(', ') %> — Win: <%= spin.win %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
