@@ -10,13 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_26_095123) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_26_095347) do
   create_table "game_sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "balance", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_game_sessions_on_user_id"
+  end
+
+  create_table "spins", force: :cascade do |t|
+    t.integer "game_session_id", null: false
+    t.json "result"
+    t.integer "bet"
+    t.integer "win"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_session_id"], name: "index_spins_on_game_session_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -32,4 +42,5 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_26_095123) do
   end
 
   add_foreign_key "game_sessions", "users"
+  add_foreign_key "spins", "game_sessions"
 end
