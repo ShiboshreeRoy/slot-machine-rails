@@ -12,4 +12,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  resource :game_session, only: [:show] do
+    post 'spin', to: 'game_sessions#spin'
+  end
+
+  root 'game_sessions#show'
 end
