@@ -13,3 +13,11 @@
  *= require_tree .
  *= require_self
  */
+@keyframes spinReel {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+}
+
+.spin {
+  animation: spinReel 0.5s ease-in-out;
+}
